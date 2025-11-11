@@ -27,7 +27,6 @@ export class TournamentsService {
   }> {
     const cacheKey = `tournaments:page:${page}:limit:${limit}:type:${type}`;
 
-    // Try to get from cache
     const cached = await this.cacheManager.get<{
       data: Tournament[];
       meta: {
@@ -40,7 +39,6 @@ export class TournamentsService {
       return cached;
     }
 
-    // Use custom repository method for filtering by type
     const [tournaments, total] = await this.tournamentRepository.findByType(
       type,
       page,
@@ -56,9 +54,25 @@ export class TournamentsService {
       },
     };
 
-    // Cache for 60 seconds
     await this.cacheManager.set(cacheKey, result, 60000);
 
     return result;
+  }
+
+  async findOne(id: number): Promise<Tournament | null> {
+    const cacheKey = `tournament:${id}`;
+
+    const cached = await this.cacheManager.get<Tournament>(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
+    const tournament = await this.tournamentRepository.findOneById(id);
+
+    if (tournament) {
+      await this.cacheManager.set(cacheKey, tournament, 30000);
+    }
+
+    return tournament;
   }
 }

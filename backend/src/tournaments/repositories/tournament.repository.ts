@@ -17,7 +17,6 @@ export class TournamentRepository {
   ): Promise<[Tournament[], number]> {
     const queryBuilder = this.repository.createQueryBuilder('tournament');
 
-    // Apply filters based on type
     switch (type.toLowerCase()) {
       case 'upcoming':
         queryBuilder
@@ -43,7 +42,6 @@ export class TournamentRepository {
         break;
       case 'all':
       default:
-        // No additional filters for 'all'
         break;
     }
 
@@ -53,5 +51,12 @@ export class TournamentRepository {
       .take(limit);
 
     return await queryBuilder.getManyAndCount();
+  }
+
+  async findOneById(id: number): Promise<Tournament | null> {
+    return await this.repository.findOne({
+      where: { id },
+      relations: ['participants'],
+    });
   }
 }

@@ -2,6 +2,7 @@ import {
   Controller,
   DefaultValuePipe,
   Get,
+  Param,
   ParseIntPipe,
   Query,
 } from '@nestjs/common';
@@ -27,5 +28,12 @@ export class TournamentsController {
     };
   }> {
     return await this.tournamentsService.findAll(page, limit, type);
+  }
+
+  @Get(':id')
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Tournament | null> {
+    return await this.tournamentsService.findOne(id);
   }
 }

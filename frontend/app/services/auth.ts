@@ -5,11 +5,14 @@ export const signupApi = async (credentials: {
   email: string;
 }) => {
   const baseUrl = getApiBaseUrl();
-  return await $fetch<{ access_token: string }>(`${baseUrl}/api/auth/signup`, {
-    method: "POST",
-    body: {
-      name: credentials.username,
-      email: credentials.email,
-    },
-  });
+  return await $fetch<{ access_token: string; user: User }>(
+    `${baseUrl}/api/auth/signup`,
+    {
+      method: "POST",
+      body: {
+        name: credentials.username,
+        email: credentials.email,
+      },
+    }
+  );
 };

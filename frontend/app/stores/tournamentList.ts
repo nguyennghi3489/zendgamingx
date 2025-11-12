@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import type { Tournament } from "~~/shared/types/tournament";
 
 interface State {
   tournaments: Tournament[];

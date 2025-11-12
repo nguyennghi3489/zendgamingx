@@ -1,5 +1,4 @@
-import { storeToRefs } from "pinia";
-import { getAllTournaments } from "~/services/api";
+import { getAllTournaments } from "~/services/tournaments";
 
 export const useTournamentList = () => {
   const store = useTournamentListStore();

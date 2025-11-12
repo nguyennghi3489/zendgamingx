@@ -13,3 +13,10 @@ export const getAllTournaments = async (
     `${baseUrl}/api/tournaments?type=${type}`
   );
 };
+
+export const getTournamentById = async (
+  id: string | number
+): Promise<Tournament> => {
+  const baseUrl = getApiBaseUrl();
+  return await $fetch<Tournament>(`${baseUrl}/api/tournaments/${id}`);
+};

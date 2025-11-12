@@ -1,16 +1,28 @@
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { TournamentRepository } from './repositories/tournament.repository';
 import { TournamentType } from './enums/tournament.enum';
 import { Tournament } from './entities/tournament.entity';
 import type { Cache } from 'cache-manager';
+import { InjectDataSource } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
+import { Participant } from './entities/participant.entity';
+import { ParticipantRepository } from './repositories/participant.repository';
 
 @Injectable()
 export class TournamentsService {
   constructor(
     @Inject(CACHE_MANAGER)
     private cacheManager: Cache,
+    @InjectDataSource()
+    private dataSource: DataSource,
     private tournamentRepository: TournamentRepository,
+    private participantRepository: ParticipantRepository,
   ) {}
 
   async findAll(
@@ -74,5 +86,61 @@ export class TournamentsService {
     }
 
     return tournament;
+  }
+
+  async joinTournament(
+    tournamentId: number,
+    userId: number,
+  ): Promise<Participant> {
+    return await this.dataSource.transaction(async (manager) => {
+      const tournament =
+        await this.tournamentRepository.isAvailableForRegistration(
+          tournamentId,
+          manager,
+        );
+
+      if (!tournament) {
+        throw new NotFoundException('Tournament not found');
+      }
+      if (tournament.status !== 'pending') {
+        throw new NotFoundException('Tournament is not open for registration');
+      }
+
+      const isAlreadyRegistered =
+        await this.participantRepository.isUserAlreadyRegistered(
+          tournamentId,
+          userId,
+          manager,
+        );
+
+      if (isAlreadyRegistered) {
+        throw new BadRequestException(
+          'User is already registered for this tournament',
+        );
+      }
+
+      const currentParticipantNumber =
+        await this.participantRepository.countParticipantsOnTournament(
+          tournamentId,
+          manager,
+        );
+
+      if (currentParticipantNumber >= tournament.maxParticipants) {
+        throw new BadRequestException(
+          `Tournament is full (${currentParticipantNumber}/${tournament.maxParticipants})`,
+        );
+      }
+
+      const savedParticipant =
+        await this.participantRepository.createParticipant(
+          tournamentId,
+          userId,
+          manager,
+        );
+
+      await this.cacheManager.del(`tournament:${tournamentId}`);
+
+      return savedParticipant;
+    });
   }
 }

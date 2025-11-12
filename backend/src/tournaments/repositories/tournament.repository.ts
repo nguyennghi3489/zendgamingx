@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Repository, DataSource } from 'typeorm';
+import { Repository, DataSource, EntityManager } from 'typeorm';
 import { Tournament } from '../entities/tournament.entity';
 
 @Injectable()
@@ -8,6 +8,10 @@ export class TournamentRepository {
 
   constructor(private dataSource: DataSource) {
     this.repository = this.dataSource.getRepository(Tournament);
+  }
+
+  private getRepository(manager?: EntityManager): Repository<Tournament> {
+    return manager ? manager.getRepository(Tournament) : this.repository;
   }
 
   async findByType(
@@ -57,6 +61,17 @@ export class TournamentRepository {
     return await this.repository.findOne({
       where: { id },
       relations: ['participants'],
+    });
+  }
+
+  async isAvailableForRegistration(
+    tournamentId: number,
+    manager?: EntityManager,
+  ): Promise<Tournament | null> {
+    const repo = this.getRepository(manager);
+    return await repo.findOne({
+      where: { id: tournamentId },
+      lock: { mode: 'pessimistic_write' },
     });
   }
 }

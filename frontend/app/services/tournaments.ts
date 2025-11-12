@@ -1,9 +1,5 @@
 import type { IPaginated, Tournament } from "~~/shared/types/tournament";
-
-const getApiBaseUrl = (): string => {
-  const config = useRuntimeConfig();
-  return config.public.apiBaseUrl as string;
-};
+import { getApiBaseUrl } from ".";
 
 export const getAllTournaments = async (
   type: string

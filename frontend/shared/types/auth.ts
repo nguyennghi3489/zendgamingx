@@ -10,6 +10,11 @@ export interface SignupRequest {
   email: string;
 }
 
+export interface SignupResponse {
+  token: string;
+  user: User;
+}
+
 export interface LoginRequest {
   username: string;
   email: string;

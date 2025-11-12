@@ -6,13 +6,6 @@ import type { Cache } from 'cache-manager';
 export class RedisService {
   constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
 
-  /**
-   * Acquire a distributed lock with a timeout
-   * @param key Lock identifier
-   * @param ttl Time to live in seconds
-   * @param maxRetries Maximum number of retry attempts
-   * @param retryDelay Delay between retries in milliseconds
-   */
   async acquireLock(
     key: string,
     ttl: number = 10,
@@ -24,35 +17,26 @@ export class RedisService {
 
     for (let i = 0; i < maxRetries; i++) {
       try {
-        // Try to get existing lock
         const existingLock = await this.cacheManager.get(lockKey);
 
-        // If no lock exists, set it
         if (!existingLock) {
           await this.cacheManager.set(lockKey, lockValue, ttl * 1000);
 
-          // Verify we got the lock by checking if our value is there
           const verifyLock = await this.cacheManager.get(lockKey);
           if (verifyLock === lockValue) {
             return true;
           }
         }
       } catch (error) {
-        // Log error but continue retrying
         console.error('Error acquiring lock:', error);
       }
 
-      // Wait before retrying
       await new Promise((resolve) => setTimeout(resolve, retryDelay));
     }
 
     return false;
   }
 
-  /**
-   * Release a distributed lock
-   * @param key Lock identifier
-   */
   async releaseLock(key: string): Promise<void> {
     const lockKey = `lock:${key}`;
     try {
@@ -62,12 +46,6 @@ export class RedisService {
     }
   }
 
-  /**
-   * Execute a function with distributed lock
-   * @param key Lock identifier
-   * @param fn Function to execute
-   * @param ttl Lock TTL in seconds
-   */
   async withLock<T>(
     key: string,
     fn: () => Promise<T>,

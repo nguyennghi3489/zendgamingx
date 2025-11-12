@@ -5,6 +5,7 @@ import { TournamentsModule } from './tournaments/tournaments.module';
 import { UsersModule } from './users/users.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-store';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { redisStore } from 'cache-manager-redis-store';
     DatabaseModule,
     TournamentsModule,
     UsersModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

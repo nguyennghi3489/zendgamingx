@@ -22,7 +22,9 @@
     "migration:run": "npm run typeorm migration:run -- -d src/database/data-source.ts",
     "migration:generate": "npm run typeorm -- -d src/database/data-source.ts migration:generate ./src/database/migrations/$npm_config_name",
     "migration:create": "npm run typeorm -- migration:create src/database/migrations/$npm_config_name",
-    "migration:revert": "npm run typeorm -- -d src/database/data-source.ts migration:revert"
+    "migration:revert": "npm run typeorm -- -d src/database/data-source.ts migration:revert",
+    "seed": "ts-node src/database/seeds/seed.ts",
+    "seed:sql": "docker exec -i zendgaming-mysql mysql -u root -proot zendgamingx < src/database/seeds/seed.sql"
   },
   "dependencies": {
     "@nestjs/cache-manager": "^3.0.1",

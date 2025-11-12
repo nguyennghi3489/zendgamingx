@@ -12,7 +12,7 @@ export class CreateParticipantsTable1731081700000
         status VARCHAR(50) NOT NULL,
         tournamentId INT NOT NULL,
         userId INT NOT NULL,
-        FOREIGN KEY (tournamentId) REFERENCES tournament(id) ON DELETE CASCADE,
+        FOREIGN KEY (tournamentId) REFERENCES tournaments(id) ON DELETE CASCADE,
         FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
       )
     `);

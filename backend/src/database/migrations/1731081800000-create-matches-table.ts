@@ -10,7 +10,7 @@ export class CreateMatchesTable1731081800000 implements MigrationInterface {
         tournamentId INT NOT NULL,
         participant1Id INT NOT NULL,
         participant2Id INT NOT NULL,
-        FOREIGN KEY (tournamentId) REFERENCES tournament(id) ON DELETE CASCADE,
+        FOREIGN KEY (tournamentId) REFERENCES tournaments(id) ON DELETE CASCADE,
         FOREIGN KEY (participant1Id) REFERENCES participants(id) ON DELETE CASCADE,
         FOREIGN KEY (participant2Id) REFERENCES participants(id) ON DELETE CASCADE
       )

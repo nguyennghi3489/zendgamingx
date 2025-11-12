@@ -95,6 +95,12 @@ const handleJoinTournament = async () => {
 
   try {
     await joinTournament(currentTournament.value!.id);
+    toast.add({
+      title: "Successfully Joined Tournament",
+      description: `You have successfully joined the tournament "${currentTournament.value?.name}".`,
+      icon: "i-heroicons-check-circle",
+      color: "success",
+    });
   } catch (error: any) {
     // Extract error message with fallback
     let errorMessage =

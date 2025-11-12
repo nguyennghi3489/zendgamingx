@@ -30,11 +30,6 @@
                     v-for="(match, matchIndex) in round"
                     :key="`match-${roundIndex}-${matchIndex}`"
                     class="bg-gray-50 rounded border border-gray-200 p-2 transform transition-all duration-300 hover:shadow-md hover:scale-105 cursor-pointer"
-                    :style="{
-                      transitionDelay: `${
-                        (roundIndex * round.length + matchIndex) * 50
-                      }ms`,
-                    }"
                   >
                     <div class="space-y-1">
                       <div

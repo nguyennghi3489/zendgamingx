@@ -16,6 +16,11 @@
     "nuxt": "^4.2.1",
     "typescript": "^5.9.3",
     "vue": "^3.5.24",
-    "vue-router": "^4.6.3"
+    "vue-router": "^4.6.3",
+    "@nuxtjs/google-fonts": "^3.2.0",
+    "@pinia/nuxt": "^0.11.3",
+    "@nuxt/icon": "^2.1.0",
+    "tailwindcss": "^4.1.17",
+    "dayjs-nuxt": "^2.1.11"
   }
 }

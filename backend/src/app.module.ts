@@ -19,7 +19,7 @@ import { AuthModule } from './auth/auth.module';
             host: configService.getOrThrow('REDIS_HOST'),
             port: configService.getOrThrow('REDIS_PORT'),
           },
-          ttl: 60, // Default TTL in seconds
+          ttl: 24 * 3600,
         });
         return { store: () => store };
       },

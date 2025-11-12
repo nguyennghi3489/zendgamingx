@@ -6,8 +6,9 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Participant } from './participant.entity';
+import { Match } from './match.entity';
 
-@Entity('tournament')
+@Entity('tournaments')
 @Index(['startTime', 'status'])
 export class Tournament {
   @PrimaryGeneratedColumn()
@@ -27,4 +28,7 @@ export class Tournament {
 
   @OneToMany(() => Participant, (participant) => participant.tournament)
   participants: Participant[];
+
+  @OneToMany(() => Match, (match) => match.tournament)
+  matches: Match[];
 }

@@ -60,7 +60,7 @@ export class TournamentRepository {
   async findOneById(id: number): Promise<Tournament | null> {
     return await this.repository.findOne({
       where: { id },
-      relations: ['participants'],
+      relations: ['participants', 'participants.user', 'matches'],
     });
   }
 

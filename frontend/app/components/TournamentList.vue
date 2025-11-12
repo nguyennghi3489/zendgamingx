@@ -46,19 +46,6 @@
 </template>
 
 <script setup lang="ts">
-import type { Tournament } from "~~/shared/types/tournament";
-
-defineProps<{
-  tournaments: Tournament[];
-  loading?: boolean;
-  hasMore?: boolean;
-}>();
-
-const emit = defineEmits<{
-  "view-tournament": [id: string | number];
-}>();
-
-// Filter options
 const filterOptions = [
   {
     label: "All Tournaments",
@@ -73,8 +60,45 @@ const filterOptions = [
 ];
 
 const selectedFilter = ref(filterOptions[0]);
+watch(selectedFilter, (newFilter) => {
+  if (newFilter) {
+    setFilter(newFilter.value as "all" | "upcoming");
+  }
+});
 
+const { setFilter, type, tournaments, loading } = useTournamentList();
 const handleViewTournament = (tournamentId: string | number) => {
-  emit("view-tournament", tournamentId);
+  navigateTo(`/tournament/${tournamentId}`);
 };
+
+onMounted(() => {
+  const foundOption = filterOptions.find(
+    (option) => option.value === type.value
+  );
+  if (foundOption) {
+    selectedFilter.value = foundOption;
+  }
+});
 </script>
+
+<style scoped>
+.tournament-card-enter-active {
+  transition: all 0.6s ease-in;
+}
+
+.tournament-card-enter-from {
+  opacity: 0;
+}
+
+.tournament-card-leave-active {
+  transition: all 0.4s ease-in-out;
+}
+
+.tournament-card-leave-to {
+  opacity: 0;
+}
+
+.tournament-card-move {
+  transition: transform ease-in;
+}
+</style>

@@ -12,18 +12,12 @@ export const useAuth = () => {
 
       const response = await signupApi(credentials);
 
-      const newUser = {
-        id: Date.now(),
-        name: credentials.username,
-        email: credentials.email,
-      };
-
-      store.user = newUser;
+      store.user = response.user;
       store.isAuthenticated = true;
       localStorage.setItem("token", response.access_token);
-      localStorage.setItem("user", JSON.stringify(newUser));
+      localStorage.setItem("user", JSON.stringify(response.user));
 
-      return newUser;
+      return response.user;
     } catch (err: unknown) {
       store.error = (err as Error).message || "Failed to signup";
       throw err;

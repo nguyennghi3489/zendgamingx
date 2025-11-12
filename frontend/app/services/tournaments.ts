@@ -19,3 +19,11 @@ export const getTournamentById = async (
     headers: getAuthHeaders(true),
   });
 };
+
+export const joinTournamentApi = async (id: string | number): Promise<any> => {
+  const baseUrl = getApiBaseUrl();
+  return await $fetch(`${baseUrl}/api/tournaments/${id}/join`, {
+    method: "POST",
+    headers: getAuthHeaders(true),
+  });
+};

@@ -26,9 +26,20 @@
           <h1 class="text-3xl font-bold text-gray-900">
             {{ tournament?.name || "Tournament" }}
           </h1>
+
+          <UButton
+            key="join-button"
+            color="primary"
+            size="lg"
+            icon="heroicons:user-plus"
+            @click="handleJoinTournament"
+            class="px-6 transform transition-all duration-200 hover:scale-105 hover:shadow-lg"
+          >
+            Join Tournament
+          </UButton>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="flex flex-start gap-20">
           <div class="flex items-center gap-3">
             <Icon
               name="heroicons:calendar-days"
@@ -74,11 +85,34 @@
 <script setup lang="ts">
 import { BASE_DATETIME_FORMAT } from "~/constants/date";
 
-const props = defineProps<{
+defineProps<{
   tournament: Tournament;
 }>();
 
-const emit = defineEmits<{
-  "view-tournament": [id: string | number];
-}>();
+const { joinTournament, currentTournament } = useTournamentDetail();
+const handleJoinTournament = async () => {
+  const toast = useToast();
+
+  try {
+    await joinTournament(currentTournament.value!.id);
+  } catch (error: any) {
+    // Extract error message with fallback
+    let errorMessage =
+      "An error occurred while joining the tournament. Please try again.";
+
+    if (error?.message) {
+      errorMessage = error.message;
+    } else if (typeof error === "string") {
+      errorMessage = error;
+    }
+
+    // Show error toast
+    toast.add({
+      title: "Failed to Join Tournament",
+      description: errorMessage,
+      icon: "i-heroicons-exclamation-triangle",
+      color: "error",
+    });
+  }
+};
 </script>

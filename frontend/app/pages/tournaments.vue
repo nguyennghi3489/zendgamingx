@@ -9,6 +9,10 @@
 <script setup lang="ts">
 const { type, fetchTournaments } = useTournamentList();
 
+definePageMeta({
+  middleware: ["protected"],
+});
+
 watch(type, () => {
   fetchTournaments();
 });

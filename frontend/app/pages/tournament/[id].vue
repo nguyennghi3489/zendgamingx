@@ -102,9 +102,11 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { useTournamentDetail } from "~/composables/useTournamentDetail";
 import { BASE_DATETIME_FORMAT } from "~/constants/date";
 
+definePageMeta({
+  middleware: ["protected"],
+});
 const route = useRoute();
 const tournamentId = route.params.id;
 

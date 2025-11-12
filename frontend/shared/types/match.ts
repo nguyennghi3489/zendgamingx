@@ -2,12 +2,10 @@ import type { Participant } from "./participant";
 
 export interface Match {
   id: string | number;
-  winner?: Participant;
+  winner?: number;
   tournamentId: string | number;
-  participant1?: Participant;
-  participant2?: Participant;
-  participant1Score?: number;
-  participant2Score?: number;
+  participant1Id?: number;
+  participant2Id?: number;
   status: "pending" | "upcoming" | "in-progress" | "completed";
   scheduledTime?: string;
 }

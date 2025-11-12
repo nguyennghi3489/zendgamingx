@@ -1,7 +1,7 @@
 // User types for simple authentication
 export interface User {
   id: string | number;
-  username: string;
+  name: string;
   email: string;
 }
 

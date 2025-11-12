@@ -14,7 +14,7 @@ export const useAuth = () => {
 
       const newUser = {
         id: Date.now(),
-        username: credentials.username,
+        name: credentials.username,
         email: credentials.email,
       };
 

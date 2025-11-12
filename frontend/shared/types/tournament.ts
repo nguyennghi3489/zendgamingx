@@ -1,3 +1,4 @@
+import type { Match } from "./match";
 import type { Participant } from "./participant";
 
 export type TournamentStatus = "upcoming" | "active";
@@ -10,6 +11,7 @@ export interface Tournament {
   status: TournamentStatus;
   participants: Participant[];
   currentParticipants?: number;
+  matches: Match[];
 }
 
 export interface IPaginated<T> {

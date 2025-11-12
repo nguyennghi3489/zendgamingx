@@ -1,3 +1,5 @@
+import type { Participant } from "./participant";
+
 export type TournamentStatus = "upcoming" | "active";
 
 export interface Tournament {
@@ -6,6 +8,8 @@ export interface Tournament {
   maxParticipants: number;
   startTime: string;
   status: TournamentStatus;
+  participants: Participant[];
+  currentParticipants?: number;
 }
 
 export interface IPaginated<T> {
